@@ -50,14 +50,10 @@ def getby_street():
                 line_count += 1
             else:
                 if row[2] == street and row[3] == house_number and garbage_type == '':
-                    week['Wochen'] = row[13]
-                    day['Tag'] = row[12]
-                    result[(str(row[1]))] = day, week
+                    result[(str(row[1]))] = {'Tag' : row[12], 'Woche' : row[13]}
                     line_count += 1
                 elif row[2] == street and row[3] == house_number and garbage_type == row[1]:
-                    week['Wochen'] = row[13]
-                    day['Tag'] = row[12]
-                    result[(str(row[1]))] = day, week                    
+                    result[(str(row[1]))] = {'Tag' : row[12], 'Woche' : row[13]}                  
                     break
 
     logging.info('Return: ' + str(result))
