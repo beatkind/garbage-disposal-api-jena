@@ -36,9 +36,11 @@ def getby_street():
     else:
         garbage_type = ''
 
-    logging.info('Request: ' + street + ' ' + house_number + ' ' + garbage_type)
+    logging.info('Request - ' + str(request.user_agent) + ': ' + street + ' ' + house_number + ' ' + garbage_type)
 
     result = {}
+    day = {}
+    week = {}
 
     with open('entsorgungstermine.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=';')
@@ -48,10 +50,14 @@ def getby_street():
                 line_count += 1
             else:
                 if row[2] == street and row[3] == house_number and garbage_type == '':
-                    result[(str(row[1]))] = row[12], row[13]
+                    week['Wochen'] = row[13]
+                    day['Tag'] = row[12]
+                    result[(str(row[1]))] = day, week
                     line_count += 1
                 elif row[2] == street and row[3] == house_number and garbage_type == row[1]:
-                    result[(str(row[1]))] = row[12], row[13]
+                    week['Wochen'] = row[13]
+                    day['Tag'] = row[12]
+                    result[(str(row[1]))] = day, week                    
                     break
 
     logging.info('Return: ' + str(result))
