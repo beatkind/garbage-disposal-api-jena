@@ -11,7 +11,6 @@ logging.info('gdaj started...')
 logging.info('Doing init stuff...')
 
 app = flask.Flask(__name__)
-api_base = '/api/v1'
 
 logging.info('App started...')
 
@@ -21,22 +20,23 @@ def home():
     return '<h1> GDAJ - garbage disposal api jena</h1>'
 
 
-@app.route(api_base + '/getby_street', methods=['GET'])
+@app.route('/getby_street', methods=['GET'])
 def getby_street():
     if 'street' in request.args:
-        street = str(request.args['street'])
+        street = str(request.args['street']).lower()
     else:
         street = ''
-    if 'house_number' in request.args:
-        house_number = str(request.args['house_number'])
+    if 'house' in request.args:
+        house_number = str(request.args['house']).lower()
     else:
         house_number = ''
     if 'garbage_type' in request.args:
-        garbage_type = str(request.args['garbage_type'])
+        garbage_type = str(request.args['garbage_type']).lower()
     else:
         garbage_type = ''
 
-    logging.info('Request - ' + str(request.user_agent) + ': ' + street + ' ' + house_number + ' ' + garbage_type)
+    logging.info('Request - ' + str(request.user_agent) + ': ' +
+                 street + ' ' + house_number + ' ' + garbage_type)
 
     result = {}
     day = {}
@@ -49,11 +49,16 @@ def getby_street():
             if line_count == 0:
                 line_count += 1
             else:
-                if row[2] == street and row[3] == house_number and garbage_type == '':
-                    result[(str(row[1]))] = {'Tag' : row[12], 'Woche' : row[13]}
+                
+                csv_garbage = row[1].lower()
+                csv_street = row[2].lower()
+                csv_house = row[3].lower()
+                
+                if csv_street == street and csv_house == house_number and garbage_type == '':
+                    result[(str(row[1]))] = {'Tag': row[12], 'Woche': row[13]}
                     line_count += 1
-                elif row[2] == street and row[3] == house_number and garbage_type == row[1]:
-                    result[(str(row[1]))] = {'Tag' : row[12], 'Woche' : row[13]}                  
+                elif csv_street == street and csv_house == house_number and csv_garbage == garbage_type:
+                    result[(str(row[1]))] = {'Tag': row[12], 'Woche': row[13]}
                     break
 
     logging.info('Return: ' + str(result))
