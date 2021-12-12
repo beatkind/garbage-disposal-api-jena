@@ -49,18 +49,96 @@ def getby_street():
             if line_count == 0:
                 line_count += 1
             else:
-                
+
                 csv_garbage = row[1].lower()
                 csv_street = row[2].lower()
                 csv_house = row[3].lower()
-                
+
                 if csv_street == street and csv_house == house_number and garbage_type == '':
-                    result[(str(row[1]))] = {'Tag': row[12], 'Woche': row[13]}
+                    result[(str(csv_garbage))] = {
+                        'Tag': row[12], 'Woche': row[13]}
                     line_count += 1
                 elif csv_street == street and csv_house == house_number and csv_garbage == garbage_type:
-                    result[(str(row[1]))] = {'Tag': row[12], 'Woche': row[13]}
+                    result[(str(csv_garbage))] = {
+                        'Tag': row[12], 'Woche': row[13]}
                     break
 
     logging.info('Return: ' + str(result))
 
     return jsonify(result)
+
+
+@app.route('/streets', methods=['GET'])
+def all_streets():
+
+    result = []
+
+    logging.info('Request - ' + str(request.user_agent))
+
+    with open('entsorgungstermine.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=';')
+        line_count = 0
+        for row in csv_reader:
+            if line_count == 0:
+                line_count += 1
+            else:
+                result.append(str(row[2]))
+
+    result = list(dict.fromkeys(result))
+
+    logging.info('Return: ' + str(result))
+
+    return jsonify(result)
+
+
+@app.route('/houses', methods=['GET'])
+def houses_of_street():
+    if 'street' in request.args:
+        street = str(request.args['street']).lower()
+    else:
+        abort(400, 'Street is missing')
+
+    result = []
+
+    logging.info('Request - ' + str(request.user_agent) + ': ' + street)
+
+    with open('entsorgungstermine.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=';')
+        line_count = 0
+        for row in csv_reader:
+            if line_count == 0:
+                line_count += 1
+            else:
+                csv_street = row[2].lower()
+                
+                if street == csv_street:
+                    result.append(str(row[3]))
+
+    if not result:
+        abort(404, 'Street not found')
+    else:
+        result = list(dict.fromkeys(result))
+        
+    logging.info('Return: ' + str(result))
+
+    return jsonify(result)
+
+
+##################
+# error handling #
+##################
+
+
+@app.errorhandler(404)
+def resource_not_found(e):
+    return jsonify(error=str(e)), 404
+
+
+@app.errorhandler(403)
+def resource_access_forbiden(e):
+    return jsonify(error=str(e)), 403
+
+
+@app.errorhandler(400)
+def resource_bad_request(e):
+    return jsonify(error=str(e)), 400
