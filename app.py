@@ -56,11 +56,11 @@ def getby_street():
 
                 if csv_street == street and csv_house == house_number and garbage_type == '':
                     result[(str(csv_garbage))] = {
-                        'Tag': row[12], 'Woche': row[13]}
+                        'Tag': convertday(row[12]), 'Woche': row[13]}
                     line_count += 1
                 elif csv_street == street and csv_house == house_number and csv_garbage == garbage_type:
                     result[(str(csv_garbage))] = {
-                        'Tag': row[12], 'Woche': row[13]}
+                        'Tag': convertday(row[12]), 'Woche': row[13]}
                     break
 
     logging.info('Return: ' + str(result))
@@ -123,6 +123,28 @@ def houses_of_street():
 
     return jsonify(result)
 
+##################
+# Helper         #
+##################
+
+def convertday(tinyday):
+
+    if tinyday == 'Mo':
+        result = 'Montag'
+    elif tinyday == 'Di':
+        result = 'Dienstag'
+    elif tinyday == 'Mi':
+        result = 'Mittwoch'
+    elif tinyday == 'Do':
+        result = 'Donnerstag'
+    elif tinyday == 'Fr':
+        result = 'Freitag'
+    elif tinyday == 'Sa':
+        result = 'Samstag'
+    elif tinyday == 'So':
+        result = 'Sontag'
+
+    return str(result)
 
 ##################
 # error handling #
