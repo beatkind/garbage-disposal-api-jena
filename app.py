@@ -155,6 +155,8 @@ def convertweek(tinyweek):
     elif tinyweek == 'w':
         result = 'wöchentlich'
 
+    return str(result)
+
 ##################
 # error handling #
 ##################
