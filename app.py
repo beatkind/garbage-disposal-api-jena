@@ -56,11 +56,11 @@ def getby_street():
 
                 if csv_street == street and csv_house == house_number and garbage_type == '':
                     result[(str(csv_garbage))] = {
-                        'Tag': convertday(row[12]), 'Woche': row[13]}
+                        'Tag': convertday(row[12]), 'Woche': convertweek(row[13])}
                     line_count += 1
                 elif csv_street == street and csv_house == house_number and csv_garbage == garbage_type:
                     result[(str(csv_garbage))] = {
-                        'Tag': convertday(row[12]), 'Woche': row[13]}
+                        'Tag': convertday(row[12]), 'Woche': convertweek(row[13])}
                     break
 
     logging.info('Return: ' + str(result))
@@ -145,6 +145,15 @@ def convertday(tinyday):
         result = 'Sontag'
 
     return str(result)
+
+def convertweek(tinyweek):
+
+    if tinyweek == 'g':
+        result = 'gerade'
+    elif tinyweek == 'u':
+        result = 'ungerade'
+    elif tinyweek == 'w':
+        result = 'wöchentlich'
 
 ##################
 # error handling #
