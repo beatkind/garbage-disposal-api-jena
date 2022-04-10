@@ -14,12 +14,12 @@ app = flask.Flask(__name__)
 
 logging.info('App started...')
 
-
+# home
 @app.route('/', methods=['GET'])
 def home():
     return '<h1> GDAJ - garbage disposal api jena</h1>'
 
-
+# get by street
 @app.route('/getby_street', methods=['GET'])
 def getby_street():
     if 'street' in request.args:
@@ -67,7 +67,7 @@ def getby_street():
 
     return jsonify(result)
 
-
+# get streets
 @app.route('/streets', methods=['GET'])
 def all_streets():
 
@@ -90,7 +90,7 @@ def all_streets():
 
     return jsonify(result)
 
-
+# get house numbers
 @app.route('/houses', methods=['GET'])
 def houses_of_street():
     if 'street' in request.args:
@@ -110,7 +110,7 @@ def houses_of_street():
                 line_count += 1
             else:
                 csv_street = row[2].lower()
-                
+
                 if street == csv_street:
                     result.append(str(row[3]))
 
@@ -118,7 +118,7 @@ def houses_of_street():
         abort(404, 'Street not found')
     else:
         result = list(dict.fromkeys(result))
-        
+
     logging.info('Return: ' + str(result))
 
     return jsonify(result)
@@ -127,6 +127,7 @@ def houses_of_street():
 # Helper         #
 ##################
 
+# convert day
 def convertday(tinyday):
 
     if tinyday == 'Mo':
@@ -146,6 +147,7 @@ def convertday(tinyday):
 
     return str(result)
 
+# convert week
 def convertweek(tinyweek):
 
     if tinyweek == 'g':
