@@ -44,12 +44,8 @@ def getby_street():
 
     with open('entsorgungstermine.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=';')
-        line_count = 0
+        line_count = 1
         for row in csv_reader:
-            if line_count == 0:
-                line_count += 1
-            else:
-
                 csv_garbage = row[1].lower()
                 csv_street = row[2].lower()
                 csv_house = row[3].lower()
