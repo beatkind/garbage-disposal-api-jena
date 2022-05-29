@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0](https://github.com/beatkind/garbage-disposal-api-jena/compare/v0.1.0...v1.0.0) (2022-05-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* **app engine:** Enable app engine
+
+### Features
+
+* **app engine:** Enable app engine ([9022793](https://github.com/beatkind/garbage-disposal-api-jena/commit/9022793f501bdef893b3dc29eb5a2d3d09e4d448))
+
 ## 0.1.0 (2022-05-29)
 
 
